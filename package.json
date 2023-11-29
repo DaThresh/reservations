@@ -4,6 +4,10 @@
   "author": "Andrew Thresher <thresh3@me.com>",
   "description": "Small NodeJS API for taking reservations",
   "scripts": {
-    "start": "node src/index"
+    "start": "ts-node src/index"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
   }
 }
