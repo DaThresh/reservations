@@ -7,6 +7,7 @@ import {
   ModelAttributes,
   Sequelize,
 } from 'sequelize';
+import { ApiError } from '../utilities/ApiError';
 import { Provider } from './Provider';
 import { primaryKeyAttributes } from './utilities';
 
@@ -17,9 +18,21 @@ export class Availability extends Model<
   declare readonly id: CreationOptional<string>;
   declare providerId: string;
   declare datetime: Date;
-  declare confirmed: boolean;
+  declare confirmed: CreationOptional<boolean>;
   declare requester: string | null;
   declare requestedAt: Date | null;
+
+  public verifyEnoughLeadTimeForBooking() {
+    const dayBeforeAvailability = new Date(this.datetime);
+    dayBeforeAvailability.setDate(dayBeforeAvailability.getDate() - 1);
+
+    if (dayBeforeAvailability < new Date()) {
+      throw new ApiError(
+        'Must give at least 24 hour lead time on booking an appointment',
+        400
+      );
+    }
+  }
 
   private static attributes: ModelAttributes<
     Availability,
