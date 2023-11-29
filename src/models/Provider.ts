@@ -1,4 +1,5 @@
 import {
+  CreationOptional,
   DataTypes,
   InferAttributes,
   InferCreationAttributes,
@@ -12,7 +13,7 @@ export class Provider extends Model<
   InferAttributes<Provider>,
   InferCreationAttributes<Provider>
 > {
-  declare readonly id: string;
+  declare readonly id: CreationOptional<string>;
   declare name: string;
 
   private static attributes: ModelAttributes<
