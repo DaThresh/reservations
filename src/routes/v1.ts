@@ -1,14 +1,36 @@
 import { Router } from 'express';
-import { getAvailabilities } from '../services/availabilities';
+import { confirmAvailability } from '../services/availabilities/confirmAvailability';
+import { createAvailabilities } from '../services/availabilities/createAvailabilities';
+import { getAvailabilities } from '../services/availabilities/getAvailabilities';
+import { purgeUnconfirmedAvailabilities } from '../services/availabilities/purgeUnconfirmed';
+import { reserveAvailability } from '../services/availabilities/reserveAvailability';
+import { createProvider } from '../services/providers/createProvider';
 
 export const createV1Router = () => {
   const v1Router = Router();
 
-  v1Router.get('/v1/availabilities', getAvailabilities);
+  // GET Endpoints
+  v1Router.get('/v1/providers/:providerId/availabilities', getAvailabilities);
 
-  // v1Router.post('/v1/availabilities');
-  // v1Router.post('/v1/appointments');
-  // v1Router.post('/v1/appointments/confirm');
+  // POST Endpoints
+  v1Router.post('/v1/providers', createProvider);
+  v1Router.post(
+    '/v1/providers/:providerId/availabilities',
+    createAvailabilities
+  );
+
+  // PATCH Endpoints
+  v1Router.patch(
+    '/v1/providers/:providerId/availabilities/:availabilityId/reserve',
+    reserveAvailability
+  );
+  v1Router.patch(
+    '/v1/providers/:providerId/availabilities/:availabilityId/confirm',
+    confirmAvailability
+  );
+
+  // This Route could have different Authentication Middleware since Origin isn't a User
+  v1Router.patch('/v1/availabilities/purge', purgeUnconfirmedAvailabilities);
 
   return v1Router;
 };
