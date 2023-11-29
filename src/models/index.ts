@@ -1,10 +1,9 @@
 import { Sequelize } from 'sequelize';
-import { Appointment } from './Appointment';
 import { Availability } from './Availability';
 import { Provider } from './Provider';
 
 export const initModels = async (sequelize: Sequelize) => {
-  const models = [Provider, Availability, Appointment];
+  const models = [Provider, Availability];
 
   for (const Model of models) {
     Model.initModel(sequelize);
@@ -15,4 +14,4 @@ export const initModels = async (sequelize: Sequelize) => {
   }
 };
 
-export { Appointment, Availability, Provider };
+export { Availability, Provider };
