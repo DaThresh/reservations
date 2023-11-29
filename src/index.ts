@@ -1,8 +1,9 @@
 import 'dotenv/config';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import { Sequelize } from 'sequelize';
 import { initModels } from './models';
 import { createV1Router } from './routes/v1';
+import { ApiError } from './utilities/ApiError';
 
 (async () => {
   const sequelize = new Sequelize({
@@ -23,6 +24,23 @@ import { createV1Router } from './routes/v1';
 
   const v1Router = createV1Router();
   application.use(v1Router);
+
+  application.use(
+    (error: unknown, _: Request, response: Response, __: NextFunction) => {
+      console.error(error);
+      if (error instanceof Error) {
+        response
+          .status(error instanceof ApiError ? error.httpStatus : 500)
+          .send({ message: error.message })
+          .end();
+      } else {
+        response
+          .status(500)
+          .send({ message: 'An unknown error occurred' })
+          .end();
+      }
+    }
+  );
 
   application.listen(+(process.env.PORT ?? 8080), () => {
     console.log('Server is listening...');
