@@ -1,0 +1,9 @@
+{
+  "name": "reservations",
+  "version": "1.0.0",
+  "author": "Andrew Thresher <thresh3@me.com>",
+  "description": "Small NodeJS API for taking reservations",
+  "scripts": {
+    "start": "node src/index"
+  }
+}
