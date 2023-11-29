@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { NextFunction, Request, Response } from 'express';
 import { Sequelize } from 'sequelize';
+import { ValidationError } from 'yup';
 import { initModels } from './models';
 import { createV1Router } from './routes/v1';
 import { ApiError } from './utilities/ApiError';
@@ -29,10 +30,14 @@ import { ApiError } from './utilities/ApiError';
     (error: unknown, _: Request, response: Response, __: NextFunction) => {
       console.error(error);
       if (error instanceof Error) {
-        response
-          .status(error instanceof ApiError ? error.httpStatus : 500)
-          .send({ message: error.message })
-          .end();
+        const status =
+          error instanceof ApiError
+            ? error.httpStatus
+            : error instanceof ValidationError
+            ? 400
+            : 500;
+
+        response.status(status).send({ message: error.message }).end();
       } else {
         response
           .status(500)
