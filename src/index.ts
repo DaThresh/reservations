@@ -1,6 +1,8 @@
 import 'dotenv/config';
+import express from 'express';
 import { Sequelize } from 'sequelize';
 import { initModels } from './models';
+import { createV1Router } from './routes/v1';
 
 (async () => {
   const sequelize = new Sequelize({
@@ -15,4 +17,14 @@ import { initModels } from './models';
   await sequelize.authenticate();
   await initModels(sequelize);
   console.log('Connected to the Database!');
+
+  const application = express();
+  application.use(express.json());
+
+  const v1Router = createV1Router();
+  application.use(v1Router);
+
+  application.listen(+(process.env.PORT ?? 8080), () => {
+    console.log('Server is listening...');
+  });
 })();
