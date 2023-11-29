@@ -6,8 +6,10 @@ import { initModels } from './models';
 import { createV1Router } from './routes/v1';
 import { ApiError } from './utilities/ApiError';
 
+export let sequelize: Sequelize;
+
 (async () => {
-  const sequelize = new Sequelize({
+  sequelize = new Sequelize({
     dialect: 'mysql',
     host: process.env.DATABASE_HOST ?? 'localhost',
     port: +(process.env.DATABASE_PORT ?? 3306),
