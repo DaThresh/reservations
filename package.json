@@ -4,7 +4,9 @@
   "author": "Andrew Thresher <thresh3@me.com>",
   "description": "Small NodeJS API for taking reservations",
   "scripts": {
-    "start": "ts-node src/index"
+    "start:prod": "node dist/index",
+    "start:dev": "ts-node src/index",
+    "build": "tsc"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
